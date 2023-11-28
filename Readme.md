@@ -61,5 +61,4 @@ php artisan key:generate
 9. OpenAPI-документация по проекту находится в директории [specification](specification)
 
 ## Техническое задание
-
 [Посмотреть техническое задание проекта](tz.md)
