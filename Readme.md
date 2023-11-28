@@ -40,19 +40,25 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-6. Запустите миграции:
+6. Запустите Docker для дальнейшей работы командой:
 
 ```bash
-php artisan migrate
+./vendor/bin/sail up
 ```
 
-7. Заполните БД сидированными данными (по желанию):
+7. Запустите миграции:
 
 ```bash
-php artisan db:seed
+./vendor/bin/sail artisan migrate
 ```
 
-8. OpenAPI-документация по проекту находится в директории [specification](specification)
+8. Заполните БД сидированными данными (по желанию):
+
+```bash
+./vendor/bin/sail artisan db:seed
+```
+
+9. OpenAPI-документация по проекту находится в директории [specification](specification)
 
 ## Техническое задание
 
