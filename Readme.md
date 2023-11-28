@@ -45,19 +45,19 @@ php artisan key:generate
 ./vendor/bin/sail up
 ```
 
-6. Далее запустите миграции:
+7. Далее запустите миграции:
 
 ```bash
 ./vendor/bin/sail artisan migrate
 ```
 
-7. Заполните БД сидированными данными (по желанию):
+8. Заполните БД сидированными данными (по желанию):
 
 ```bash
 ./vendor/bin/sail artisan db:seed
 ```
 
-8. OpenAPI-документация по проекту находится в директории [specification](specification)
+9. OpenAPI-документация по проекту находится в директории [specification](specification)
 
 ## Техническое задание
 
