@@ -2,12 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
-use Illuminate\Validation\Rules\Unique;
 
 class UserRequest extends FormRequest
 {
@@ -34,9 +29,7 @@ class UserRequest extends FormRequest
             'phone' => [
                 'required',
                 'string',
-                'phone',
-                'regex:/^\+7\d{10}$/',
-                $this->getUniqRule()
+                'regex:/^\+7\d{10}$/'
             ],
             'password' => [
                 $this->getPasswordRequiredRule(),
@@ -44,27 +37,8 @@ class UserRequest extends FormRequest
                 'min:8',
                 'confirmed',
             ],
-            'avatar_url' => [
-                'required',
-                File::image()->max(2048)
-            ]
+            'avatar_url' => 'nullable|image|max:2048'
         ];
-    }
-
-    /**
-     * Метод проверяет телефон на уникальность
-     *
-     * @return Unique
-     */
-    private function getUniqRule(): Unique
-    {
-        $rule = Rule::unique(User::class);
-
-        if ($this->isMethod('patch') && Auth::check()) {
-            return $rule->ignore(Auth::user());
-        }
-
-        return $rule;
     }
 
     /**

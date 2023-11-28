@@ -6,14 +6,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FailResponse extends BaseResponse
 {
+    public int $statusCode = Response::HTTP_REQUEST_TIMEOUT;
+    protected string $message;
+
     /**
      * @param string $message
      * @param int $statusCode
      */
     public function __construct(
-        protected string $message = 'Истекло время ожидания, повторите попытку.',
-        public int $statusCode = Response::HTTP_REQUEST_TIMEOUT
+        string $message = 'Истекло время ожидания, повторите попытку.',
+        int $statusCode = Response::HTTP_REQUEST_TIMEOUT
     ) {
+        $this->message = $message;
+
         parent::__construct([], $statusCode);
     }
 

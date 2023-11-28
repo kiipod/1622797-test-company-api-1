@@ -29,9 +29,11 @@ Route::prefix('user')->middleware('auth:sanctum')->group(function () {
 
 Route::group(['prefix' => 'company'], function () {
     Route::get('/{id}', [CompanyController::class, 'show'])->name('company.show');
-    Route::get('{id}/comments', [CommentController::class, 'index'])
-        ->where('id', '\d+')->name('comments.index');
+    Route::get('/{id}/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::get('/{id}/rating', [CompanyController::class, 'avgRating'])->name('company.rating');
 });
+
+Route::get('/top', [CompanyController::class, 'bestCompany'])->name('company.best');
 
 Route::prefix('company')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [CompanyController::class, 'create'])->name('company.create');
