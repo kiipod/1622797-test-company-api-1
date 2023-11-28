@@ -1,0 +1,544 @@
+openapi: 3.1.0
+
+info:
+  title: REST API сервер для проекта «Test Company API».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Test Company API».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 5.0.0
+
+tags:
+  - name: auth
+    description: Регистрация и аутентификация.
+  - name: users
+    description: Действия с пользователем.
+  - name: company
+    description: Действия с компаниями.
+  - name: comments
+    description: Действия с комментариями.
+
+paths:
+  /api/register:
+    post:
+      tags:
+        - auth
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+
+        responses:
+          "201":
+            description: Пользователь зарегистрирован. Объект пользователя.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/authUser'
+
+          "409":
+            description: Пользователь с таким телефоном уже существует.
+
+  /api/login:
+    post:
+      tags:
+        - auth
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе телефона и пароля
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+        required: true
+
+        responses:
+          "201":
+            description: Пользователь авторизован. Токен пользователя.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/authUser'
+          "401":
+            description: Неверный телефон или пароль.
+
+  /api/logout:
+    post:
+      tags:
+        - auth
+      summary: Выход пользователя из закрытой части приложения
+      description: Выход пользователя из закрытой части приложения
+
+      responses:
+        "204":
+          description: Пользователь успешно вышел.
+
+  /api/user/{id}:
+    patch:
+      tags:
+        - users
+      summary: Обновление информации о пользователе
+      description: Обновление информации о пользователе.
+
+      requestBody:
+        description: Информация для обновления информации о пользователе.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+
+        responses:
+          "201":
+            description: Информация о пользователе обновлена. Объект пользователя.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/user'
+
+          "409":
+            description: Пользователя с таким id не существует.
+
+    delete:
+      tags:
+        - users
+      summary: Удаления пользователя
+      description: Удаления пользователя
+
+      responses:
+        "204":
+          description: Пользователь успешно удалено.
+        "409":
+          description: Пользователя с таким id не существует.
+
+  /api/company/{id}:
+    get:
+      tags:
+        - company
+      summary: Получение информации о компании
+      description: Получение информации о компании.
+
+      responses:
+        "201":
+          description: Информация о компании успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/companyId'
+
+    patch:
+      tags:
+        - company
+      summary: Редактирование информации о компании
+      description: Редактирование информации о компании
+
+      requestBody:
+        description: Информация для обновления информации о компании.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/changeCompany'
+        required: true
+
+        responses:
+          "201":
+            description: Информация о компании обновлена. Объект компании.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/company'
+
+          "409":
+            description: Компании с таким id не существует.
+
+      delete:
+        tags:
+          - company
+        summary: Удаление компании
+        description: Удаление компании
+
+        responses:
+          "204":
+            description: Информация о компании успешно удалена.
+          "403":
+            description: Удалять можно только свою компанию.
+
+  /api/company:
+    post:
+      tags:
+        - company
+      summary: Создание новой компании
+      description: Создает новую компанию на сайте
+
+      requestBody:
+        description: Информация для создания компании.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/changeCompany'
+        required: true
+
+        responses:
+          "201":
+            description: Компания успешно создана.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/company'
+
+  /api/company/{id}/comments:
+    post:
+      tags:
+        - comments
+      summary: Создание нового комментария к компании
+      description: Создание нового комментария к компании
+
+      requestBody:
+        description: Создание нового комментария для компании
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newComment'
+        required: true
+
+      responses:
+          "201":
+            description: Комментарий успешно создан.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comments'
+
+      get:
+        tags:
+          - company
+
+        responses:
+          "201":
+            description: Получение всех комментариев для компании
+            content:
+              application/json:
+               schema:
+                  $ref: '#/components/schemas/comments'
+
+  /api/company/{id}/rating:
+    get:
+      tags:
+        - company
+      summary: Получение рейтинга компании
+      description: Получение рейтинга компании
+
+      responses:
+        "201":
+          description: Получение рейтинга компании
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rating'
+
+  /api/top:
+    get:
+      tags:
+        - company
+      summary: Получение топ-10 компаний по оценке
+      description: Получение топ-10 компаний по оценке
+
+      responses:
+        "201":
+          description: Получение топ-10 компаний по оценкам
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/top10'
+
+  /api/comments/{comments}:
+    patch:
+      tags:
+        - comments
+      summary: Редактирование комментария
+      description: Редактирование комментария у компании
+
+      requestBody:
+        description: Информация для обновления информации о пользователе.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newComment'
+        required: true
+
+        responses:
+          "201":
+            description: Комментарий успешно изменен.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comments'
+
+          "409":
+            description: Комментария с таким id не существует.
+
+    delete:
+      tags:
+        - comments
+      summary: Удаление комментария
+      description: Удаление комментария у компании.
+
+      responses:
+        "204":
+          description: Комментарий успешно удалено.
+        "403":
+          description: Удалять можно только свои комментарии.
+
+# Список компонентов для OPEN API
+components:
+  schemas:
+
+# Сущность пользователь
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Vasya
+
+        surname:
+          type: string
+          example: Pupkin
+
+        phone:
+          type: string
+          example: '+71234567890'
+
+        avatar_url:
+          type: string
+          example: "avatar.jpg"
+
+        password:
+          type: string
+          example: password
+
+    authUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        name:
+          type: string
+          example: Vasya
+
+        surname:
+          type: string
+          example: Pupkin
+
+        phone:
+          type: string
+          example: '+71234567890'
+
+        avatar_url:
+          type: string
+          example: "avatar.jpg"
+
+        bearer token:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+    loginUser:
+      type: object
+      properties:
+
+        phone:
+          type: string
+          example: '+71234567890'
+
+        password:
+          type: string
+          example: password
+
+# Сущность компания
+    companyId:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 12
+
+        user_id:
+          type: string
+          example: 2
+
+        title:
+          type: string
+          example: Company Sport
+
+        description:
+          type: string
+          example: This is best company!
+
+        logo:
+          type: string
+          example: 'logo.jpeg'
+
+        created_at:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        comments:
+          type: object
+          $ref: '#/components/schemas/commentsCompany'
+
+    company:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 12
+
+        user_id:
+          type: string
+          example: 2
+
+        title:
+          type: string
+          example: Company Sport
+
+        description:
+          type: string
+          example: This is best company!
+
+        logo:
+          type: string
+          example: 'logo.jpeg'
+
+        created_at:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        updated_at:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+    changeCompany:
+      type: object
+      properties:
+        title:
+          type: string
+          example: New Company Name
+
+        description:
+          type: string
+          example: New company Description
+
+        logo:
+          type: string
+          example: 'logo.jpeg'
+
+    rating:
+      type: object
+      properties:
+        rating:
+          type: number
+          example: 4.2
+
+    top10:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 12
+
+        title:
+          type: string
+          example: Company Sport
+
+        description:
+          type: string
+          example: This is best company!
+
+        logo:
+          type: string
+          example: 'logo.jpeg'
+
+# Сущность комментарии
+    comments:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 65219307def86da328c9ea9a
+
+        text:
+          type: string
+          example: Wow, this is Amazing House!!!
+
+        rating:
+          type: number
+          example: 4
+
+        created_at:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+        user_id:
+          type: object
+          $ref: '#/components/schemas/user_id'
+
+    user_id:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 65211e7e615961c0f4cbefe8
+
+        name:
+          type: string
+          example: Vasya
+
+    commentsCompany:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 65219307def86da328c9ea9a
+
+        user_id:
+          type: string
+          example: 2
+
+        company_id:
+          type: string
+          example: 5
+
+        text:
+          type: string
+          example: Wow, this is Amazing House!!!
+
+        rating:
+          type: number
+          example: 4
+
+        created_at:
+          type: string
+          example: 2023-10-07T17:19:03.813Z
+
+    newComment:
+      type: object
+      properties:
+
+        text:
+          type: string
+          example: Wow, this is Amazing House!!!
+
+        rating:
+          type: number
+          example: 4,2

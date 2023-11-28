@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class CompanyRequest extends FormRequest
 {
@@ -56,10 +55,7 @@ class CompanyRequest extends FormRequest
                 'string',
                 'between:150,400'
             ],
-            'logo' => [
-                'required',
-                File::image()->max(3072)
-            ]
+            'logo' => 'required|image|max:3048'
         ];
     }
 }

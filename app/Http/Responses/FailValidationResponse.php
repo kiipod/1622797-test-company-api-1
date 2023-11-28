@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FailValidationResponse extends BaseResponse
 {
+    public int $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+    protected string $message;
+
     /**
      * @param $data
      * @param string $message
@@ -13,9 +16,11 @@ class FailValidationResponse extends BaseResponse
      */
     public function __construct(
         $data,
-        protected string $message = 'Переданные данные не корректны.',
-        public int $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY
+        string $message = 'Переданные данные не корректны.',
+        int $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY
     ) {
+        $this->message = $message;
+
         parent::__construct([], $statusCode);
     }
 

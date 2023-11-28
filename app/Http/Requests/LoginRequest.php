@@ -25,7 +25,6 @@ class LoginRequest extends FormRequest
             'phone' => [
                 'required',
                 'string',
-                'phone',
                 'regex:/^\+7\d{10}$/'
             ],
             'password' => [

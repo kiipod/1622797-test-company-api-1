@@ -6,14 +6,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NotFoundResponse extends BaseResponse
 {
+    public int $statusCode = Response::HTTP_NOT_FOUND;
+    protected string $message;
+
     /**
      * @param string $message
      * @param int $statusCode
      */
     public function __construct(
-        protected string $message = 'Запрашиваемая страница не существует.',
-        public int $statusCode = Response::HTTP_NOT_FOUND
+        string $message = 'Запрашиваемая страница не существует.',
+        int $statusCode = Response::HTTP_NOT_FOUND
     ) {
+        $this->message = $message;
+
         parent::__construct([], $statusCode);
     }
 
