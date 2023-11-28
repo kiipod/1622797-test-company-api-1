@@ -9,14 +9,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseResponse implements Responsable
 {
+    protected mixed $data = [];
+    public int $statusCode;
+
     /**
      * @param mixed $data
      * @param int $statusCode
      */
     public function __construct(
-        protected mixed $data = [],
-        public int $statusCode = Response::HTTP_OK
+        mixed $data = [],
+        int $statusCode = Response::HTTP_OK
     ) {
+        $this->data = $data;
+        $this->statusCode = $statusCode;
     }
 
     public function toResponse($request): JsonResponse|Response
