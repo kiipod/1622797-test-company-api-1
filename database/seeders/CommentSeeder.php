@@ -15,7 +15,7 @@ class CommentSeeder extends Seeder
      */
     public function run(): void
     {
-        Comment::factory()->count(30)->state(new Sequence(
+        Comment::factory()->count(100)->state(new Sequence(
             fn ($sequence) => ['user_id' => User::all()->random(),
                 'company_id' => Company::all()->random()]
         ))->create();
