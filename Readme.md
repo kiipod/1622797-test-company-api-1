@@ -39,13 +39,14 @@ cp .env.example .env
 ```bash
 php artisan key:generate
 ```
-6. Запустите проект в Docker:
+
+6. Запустите Docker для дальнейшей работы командой:
 
 ```bash
 ./vendor/bin/sail up
 ```
 
-7. Далее запустите миграции:
+7. Запустите миграции:
 
 ```bash
 ./vendor/bin/sail artisan migrate
